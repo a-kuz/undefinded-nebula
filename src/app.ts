@@ -17,21 +17,19 @@ const sketch = (p5: P5) => {
   let marginX = 250;
   let marginY = 250;
   let scale = 1;
-  let starBrightess = 20;
+
   function randomChord() {
+    let starBrightess = p5.randomGaussian(100, 50);
     if (p > p5.PI / 4) p -= 0.0009;
     else p = p5.PI;
     // find a random point on a circle
 
-    red =
-      p5.random(time > 1000 * 10 ? 100 : 190, time > 1000 * 10 ? 140 : 245) +
-      255 -
-      blueBase;
+    red = p5.random(230, 255) - blueBase;
     blue = p5.random(40, 50) + blueBase;
     p5.noStroke();
     if (p5.random() < 2) {
       let angle1 = p5.random(0, 2 * p5.PI);
-      let rr = p5.randomGaussian(r / 2, r * 5);
+      let rr = p5.randomGaussian(r / 2, r * 15);
       let xpos1 = r + rr * p5.cos(angle1) + marginX;
       let ypos1 = r + rr * p5.sin(angle1) + marginY;
       let rrr = p5.randomGaussian(0.3, 3);
@@ -58,13 +56,7 @@ const sketch = (p5: P5) => {
   p5.setup = () => {
     p5.createCanvas(p5.windowWidth, p5.windowHeight);
     p5.background(0);
-    p5.frameRate(120);
-
-    // translucent stroke using alpha value
-
-    //p5.noSmooth();
-    //p5.pixelDensity(1);
-    //p5.frameRate(910);
+    p5.frameRate(60);
   };
 
   p5.mouseClicked = () => {
@@ -80,7 +72,7 @@ const sketch = (p5: P5) => {
   p5.draw = () => {
     // scale -= 0.0001;
     time += p5.deltaTime;
-    for (let i = 0; i < 23; i++) {
+    for (let i = 0; i < 12; i++) {
       marginX = marginX + p5.randomGaussian(0, 12);
       marginY = marginY + p5.randomGaussian(0, 9);
       if (marginX < 0) marginX = p5.width;
@@ -88,17 +80,25 @@ const sketch = (p5: P5) => {
       if (marginX > p5.width) marginX = 0;
       if (marginY > p5.height - 50) marginY = 0;
 
-      for (let i = 0; i < 2; i++) randomChord();
-      let rectW = 450;
-      let rectH = 40;
-      p5.noFill();
-      p5.fill(0, 0, 0);
-      p5.rect(p5.width - rectW, p5.height - rectH, rectW, rectH);
-      p5.fill(0, 255, 255);
-      p5.noStroke();
+      for (let i = 0; i < 3; i++) randomChord();
+    }
+    let rectW = 40;
+    let rectH = 40;
+    p5.smooth();
 
-      p5.textSize(14);
-      p5.text(p5.frameRate().toFixed(0), p5.width - rectW, p5.height - 10);
+    //p5.troke();
+    p5.fill(red, green, blue);
+    p5.rect(rectW * 2, rectH, rectW / 2, rectH / 2);
+
+    if (p5.frameCount % 40 === 5) {
+      p5.fill(0, 0, 0, 200);
+      p5.rect(rectW, rectH, rectW, rectH);
+      p5.fill(255);
+      p5.stroke(255);
+
+      p5.textSize(19);
+      p5.text(p5.frameRate().toFixed(0), rectW + 10, rectH + 24);
+      p5.noStroke();
     }
     // randomChord();
     // randomChord();
